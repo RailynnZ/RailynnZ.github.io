@@ -158,8 +158,10 @@ textarea {
 .home-stack {
   position: relative;
   isolation: isolate;
-  overflow: clip;
+  /* 不裁切：blur / transform 会画出元素盒外，clip 会在四周出现「硬边」 */
+  overflow: visible;
   width: 100%;
+  min-height: 100svh;
 }
 
 .home-stack__backdrop {
@@ -280,65 +282,19 @@ textarea {
   }
 }
 
-/* Plasma shader layer (above static gradients, below hero copy) */
+/* Plasma shader层：铺满整页 home-stack（随内容增高），不再固定 600px */
 .home-plasma-host {
   pointer-events: none;
   position: absolute;
   z-index: 1;
-  inset-inline: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
+  inset: 0;
 }
 
 .home-plasma-inner {
   width: 100%;
-  height: 600px;
+  height: 100%;
+  min-height: 100%;
   position: relative;
-}
-
-@media (max-width: 767px) {
-  .home-plasma-inner {
-    height: min(600px, 52vh);
-  }
-}
-
-/* 巨幅浮雕水印文案 */
-.home-marquee-grow {
-  pointer-events: none;
-  position: absolute;
-  z-index: 1;
-  inset-inline: clamp(-8px, -2vw, 0px);
-  top: clamp(3.75rem, 12vh + 1.5rem, 7rem);
-  margin: 0;
-  width: calc(100% + clamp(18px, 4vw, 28px));
-  font-family: var(--font-sans);
-  font-size: clamp(3.85rem, 18vw + 0.85rem, 12.65rem);
-  font-weight: 800;
-  line-height: 0.93;
-  text-align: center;
-  letter-spacing: -0.045em;
-
-  color: rgba(255, 255, 255, 0.1);
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.08);
-
-  opacity: 0.95;
-  text-shadow:
-    0 -2px 0 rgba(200, 200, 204, 0.1),
-    0 -1px 0 rgba(255, 255, 255, 0.04),
-    0 14px 48px rgba(0, 0, 0, 0.95),
-    0 min(76px, 12vw) 28px rgba(220, 220, 224, 0.1),
-    0 26px min(148px, 22vw) rgba(0, 0, 0, 0.92);
-
-  filter: blur(0.12px);
-
-  mask-image: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) min(94%, 100vw),
-    rgba(0, 0, 0, 0) 100%
-  );
 }
 
 /* Homepage foreground title */
@@ -349,7 +305,12 @@ textarea {
   line-height: 1.07;
   letter-spacing: -0.035em;
   color: #f6f6f8;
-  text-shadow: 0 1px 28px rgba(0, 0, 0, 0.5);
+  background: transparent;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: none;
+  filter: none;
+  mix-blend-mode: normal;
 }
 
 .home-stack .section {
@@ -393,7 +354,8 @@ textarea {
 .ambient {
   pointer-events: none;
   position: fixed;
-  inset: 0;
+  /* 略大于视口，给模糊光斑与位移动效留出裁切边距，减少贴边被切平 */
+  inset: -12%;
   z-index: 0;
   overflow: hidden;
 }

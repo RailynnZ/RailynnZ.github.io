@@ -29,11 +29,6 @@ export function HomePage() {
         </div>
       </div>
 
-      {/* 巨幅水印：浮雕肌理，不参与焦点与朗读 */}
-      <p className="home-marquee-grow" aria-hidden>
-        Grow&nbsp;freely
-      </p>
-
       <div className="container stack home-stack__content">
       <section className="hero">
         <p className="mono-label hero__tag">ambient folio · no imagery</p>
