@@ -2,6 +2,8 @@
 
 RailynnZ 的 GitHub Pages 站点，使用 Vite、React 与 TypeScript 搭建。
 
+远程仓库：`git@github.com:RailynnZ/RailynnZ.github.io.git`
+
 ## 本地开发
 
 ```bash
@@ -9,20 +11,16 @@ npm install
 npm run dev
 ```
 
-## 构建
+## 构建与部署到 `docs/`
 
 ```bash
 npm run build
 ```
 
-## GitHub Pages（个站）
+构建产物输出到仓库根目录下的 **`docs/`**（已纳入 Git）。推送 `main` 后，在 GitHub 上把 Pages 发布源指向该文件夹即可。
 
-仓库根目录里的是 **源码**，GitHub Pages 只会托管静态文件；直接发布 `main` 根目录时，浏览器无法运行 `src/main.tsx`，页面会空白。
+- 官方说明：[Configuring a publishing source for your GitHub Pages site](https://docs.github.com/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+- 个站仓库名需为 `<用户名>.github.io`；在 **Settings → Pages** 中选择 **Deploy from a branch**，分支 **main**，文件夹 **`/docs`**。
+- 选择 **`/docs` 作为发布目录时，站点根 URL 仍是 `https://<用户名>.github.io/`，并不是 `.../docs/`**；GitHub 会把 `docs` 里的文件当作网站根目录来提供。
 
-本仓库通过 **GitHub Actions** 在每次推送到 `main` 时执行 `npm run build`，把 `dist/` 部署到 Pages。
-
-1. 打开仓库 **Settings → Pages**。
-2. **Build and deployment** 里将 **Source** 设为 **GitHub Actions**（不要再用 “Deploy from a branch” 指向 `main` 根目录）。
-3. 推送触发工作流后，在 **Actions** 里确认 “Deploy to GitHub Pages” 成功；几分钟后访问 `https://railynnz.github.io/`。
-
-构建脚本会把 `index.html` 复制为 `404.html`，便于在子路径（如 `/about`）直接刷新时仍由前端路由接管。
+`public/.nojekyll` 会随构建进入 `docs/`，用于关闭 Jekyll，避免静态资源被错误处理。`404.html` 由构建脚本从 `index.html` 复制，便于子路径刷新时仍由前端路由接管。
